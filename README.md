@@ -24,4 +24,7 @@ Each exercise includes:
 
 ### Exercise 1: Find first dead enemy
 **CE link:** https://compiler-explorer.com/z/P5qd8hjsc 
+
 **File:** `exercises/ex01_find_first_dead.cpp`
+
+### Exercise 2: Find first dead enemy
