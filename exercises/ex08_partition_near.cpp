@@ -4,7 +4,7 @@
 #include <algorithm>
 
 // Challenge 8: partition_near_enemies
-//		https://compiler-explorer.com/z/qad6KToee
+//		https://compiler-explorer.com/z/aoodb83Ye
 // Compiler Explorer normally recompiles automatically as you edit.
 // If you turn that off or it gets stuck, press CTRL+K to build and run manually.
 // Use the Output panel to see compiler messages and your program’s output.
@@ -22,7 +22,6 @@ float distance_sq(const Vec2& a, const Vec2& b) {
     return dx * dx + dy * dy;
 }
 
-//TODO: refactor to take std::span
 size_t partition_near_enemies(std::vector<Enemy>& enemies, Vec2 playerPos, float radius) {
     // TODO: refactor this to use std::partition
     const float radiusSq = radius * radius;

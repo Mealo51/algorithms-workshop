@@ -55,10 +55,8 @@ There are no trick questions: only the implementation should change, not the beh
 **File:** `exercises/ex07_row_walkable.cpp`
 
 ### Exercise 8: Partition near enemies
-**CE link:** https://compiler-explorer.com/z/MY_NEW_LINK_HERE  
+**CE link:** https://compiler-explorer.com/z/aoodb83Ye
 **File:** `exercises/ex08_partition_near.cpp`
-
-*(Replace the placeholder link above once you generate the CE snippet.)*
 
 ### Exercise 9: Remove consecutive duplicate frames
 **CE link:** https://compiler-explorer.com/z/j5ased9YW  
