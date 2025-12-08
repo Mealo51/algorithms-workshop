@@ -27,4 +27,44 @@ Each exercise includes:
 
 **File:** `exercises/ex01_find_first_dead.cpp`
 
-### Exercise 2: Find first dead enemy
+### Exercise 2: Count poisoned enemies
+**CE Link:** https://compiler-explorer.com/z/qTWseobfM
+**File:** `exercises/ex02_count_poisoned.cpp`
+
+### Exercise 3: Remove off screen bullets
+**CE Link:** https://compiler-explorer.com/z/YMM96d5dY
+**File:** `exercises/ex03_remove_offscreen.cpp`
+
+### Exercise 4: Clamp health after damage
+**CE Link:** https://compiler-explorer.com/z/GGrYrhxGb
+**File:** `exercises/ex04_apply_damage.cpp`
+
+### Exercise 5: Total weight of inventory
+**CE Link:** https://compiler-explorer.com/z/cTEjT5o5r
+**File:** `exercises/ex05_total_weight.cpp`
+
+### Exercise 6: Sort enemies by distance
+**CE Link:** https://compiler-explorer.com/z/Y7scnvjGe
+**File:** `exercises/ex06_sort_by_distance.cpp`
+
+
+### Exercise 7: Walkable row / lava detection
+**CE Link:** https://compiler-explorer.com/z/qad6KToee
+**File:** `exercises/ex07_row_walkable.cpp`
+
+### Exercise 8: Partition near enemies
+**CE Link:** https://compiler-explorer.com/z/qad6KToee
+**File:** `exercises/ex08_partition_near.cpp`
+
+### Exercise 9: Remove consecutive duplicate frames
+**CE Link:** https://compiler-explorer.com/z/j5ased9YW
+**File:** `exercises/ex09_unique_frames.cpp`
+
+
+### Exercise 10: Gather names of low HP enemies
+**CE Link:** https://compiler-explorer.com/z/v9E4G9cq1
+**File:** `exercises/ex10_low_hp_names.cpp`
+
+### Exercise 11: Shuffle deck
+**CE Link:** https://compiler-explorer.com/z/oqcW7aEdT
+**File:** `exercises/ex11_shuffle_deck.cpp`
