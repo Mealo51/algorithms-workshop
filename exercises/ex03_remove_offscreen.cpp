@@ -2,7 +2,7 @@
 #include <vector>
 
 // Challenge 3: remove_offscreen
-//		https://compiler-explorer.com/z/YMM96d5dY
+//		https://compiler-explorer.com/z/Gj66nGcE3
 // Compiler Explorer normally recompiles automatically as you edit.
 // If you turn that off or it gets stuck, press CTRL+K to build and run manually.
 // Use the Output panel to see compiler messages and your program’s output.
@@ -12,7 +12,6 @@ struct Bullet {
     bool alive;
 };
 
-//TODO: refactor to take span
 void remove_offscreen(std::vector<Bullet>& bullets, float screenWidth, float screenHeight) {
     // TODO: refactor this to use std::remove_if + erase, or std::erase_if
     for (size_t i = 0; i < bullets.size(); ) {
