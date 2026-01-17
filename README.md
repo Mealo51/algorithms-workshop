@@ -35,7 +35,7 @@ There are no trick questions: only the implementation should change, not the beh
 **File:** `exercises/ex02_count_poisoned.cpp`
 
 ### Exercise 3: Remove off-screen bullets
-**CE link:** https://compiler-explorer.com/z/YMM96d5dY  
+**CE link:** https://compiler-explorer.com/z/Gj66nGcE3  
 **File:** `exercises/ex03_remove_offscreen.cpp`
 
 ### Exercise 4: Clamp health after damage
