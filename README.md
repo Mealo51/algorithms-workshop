@@ -61,8 +61,6 @@ The symbols come from the [0rwx framework](https://0rwx.com). [Original artwork]
 
 ## Exercises
 
-Start with the queries. Then choose exercises from the remaining groups. Some files contain sibling tasks that use the same game data to answer different questions.
-
 | Exercise | What the code does | Practice |
 | --- | --- | --- |
 | [1. Search a combat roster](exercises/ex01_find_first_dead.cpp) | Check for an exact selected ID and find the first dead enemy in spawn order. | `find`, `find_if`, checking for `end()` |
