@@ -82,4 +82,4 @@ Modern C++ often favours passing small objects by value. A `const&` parameter le
 - If the function takes a `const std::vector<T>&` and just reads the elements, try `std::span<const T>`. The caller can now pass a vector, an array, or a slice of either. Exercise 3 already uses this. [`std::span`](https://en.cppreference.com/cpp/container/span)
 - If the function reads text through a `const std::string&` or a pointer and a length, try `std::string_view`. The caller can pass a string, a string literal, or part of a string. [`std::string_view`](https://en.cppreference.com/cpp/string/basic_string_view)
 
-Once your algorithm refactor passes, try changing a parameter and run the same tests. Use `std::span<T>` if the function needs to change or reorder elements. Keep the vector reference in exercises 6 and 9, where the function changes the vector’s size.
+Once your algorithm refactor passes, try changing a parameter and run the same tests. Use `std::span<T>` (non-const T!) if the function needs to change or reorder elements. Keep the vector reference in exercises 6 and 9, where the function changes the vector’s size.
