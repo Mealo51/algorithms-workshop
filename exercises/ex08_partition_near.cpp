@@ -1,66 +1,80 @@
-#include <gtest/gtest.h>
-#include <vector>
-#include <cmath>
-#include <algorithm>
+// Challenge 8: Group AI updates by proximity
+//
+// An AI update processes nearby enemies first. Move every enemy at or
+// inside the given radius to the front and return the size of that group.
+// The input radius is nonnegative. Keep all enemies in the original vector.
+// The relative order within either group can change.
 
-// Challenge 8: partition_near_enemies
-//		https://compiler-explorer.com/z/aoodb83Ye
-// Compiler Explorer normally recompiles automatically as you edit.
-// If you turn that off or it gets stuck, press CTRL+K to build and run manually.
-// Use the Output panel to see compiler messages and your program’s output.
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <iterator>
+#include <utility>
+#include <vector>
+
 struct Vec2 {
-    float x, y;
+    float x;
+    float y;
+
+    bool operator==(const Vec2&) const = default;
 };
 
 struct Enemy {
+    int id;
     Vec2 position;
+
+    bool operator==(const Enemy&) const = default;
 };
 
-float distance_sq(const Vec2& a, const Vec2& b) {
-    float dx = a.x - b.x;
-    float dy = a.y - b.y;
+float distance_sq(Vec2 a, Vec2 b) {
+    const float dx = a.x - b.x;
+    const float dy = a.y - b.y;
     return dx * dx + dy * dy;
 }
 
-size_t partition_near_enemies(std::vector<Enemy>& enemies, Vec2 playerPos, float radius) {
-    // TODO: refactor this to use std::partition
-    const float radiusSq = radius * radius;
-    size_t firstFar = 0;
-
-    for (size_t i = 0; i < enemies.size(); ++i) {
-        float d2 = distance_sq(enemies[i].position, playerPos);
-        if (d2 <= radiusSq) {
+std::size_t partition_near_enemies(std::vector<Enemy>& enemies, Vec2 player, float radius) {
+    // TODO: Use std::partition with a lambda that captures the player and
+    // squared radius. Convert the returned boundary to a count.
+    // https://en.cppreference.com/cpp/algorithm/partition
+    // For the count, see https://en.cppreference.com/cpp/iterator/distance
+    const float radiusSquared = radius * radius;
+    std::size_t firstFar = 0;
+    for (std::size_t i = 0; i < enemies.size(); ++i) {
+        if (distance_sq(enemies[i].position, player) <= radiusSquared) {
             std::swap(enemies[i], enemies[firstFar]);
             ++firstFar;
         }
     }
-    return firstFar; // number of near enemies at front
+    return firstFar;
 }
 
-TEST(PartitionNearEnemiesTest, NearEnemiesComeFirst) {
-    Vec2 player{0.0f, 0.0f};
-    std::vector<Enemy> enemies{
-        {{10.0f, 0.0f}}, // far (10)
-        {{1.0f, 1.0f}},  // near (sqrt(2))
-        {{3.0f, 4.0f}},  // near (5)
-        {{20.0f, 0.0f}}  // far (20)
+TEST(PartitionNearEnemiesTest, IncludesTheBoundaryAndPreservesAllEnemies) {
+    const Vec2 player{10, 0};
+    const std::vector<Enemy> original{
+        {1, {0, 0}}, {2, {13, 4}}, {3, {30, 0}}, {4, {10, 1}}
     };
+    auto enemies = original;
 
-    size_t countNear = partition_near_enemies(enemies, player, 6.0f);
-
-    EXPECT_EQ(countNear, 2u);
-
-    // Check that first countNear are near
-    for (size_t i = 0; i < countNear; ++i) {
-        float d2 = distance_sq(enemies[i].position, player);
-        EXPECT_LE(d2, 36.0f);
+    ASSERT_EQ(partition_near_enemies(enemies, player, 5), 2u);
+    ASSERT_EQ(enemies.size(), original.size());
+    for (std::size_t i = 0; i < enemies.size(); ++i) {
+        EXPECT_EQ(distance_sq(enemies[i].position, player) <= 25, i < 2);
     }
+    // https://en.cppreference.com/cpp/algorithm/is_permutation
+    EXPECT_TRUE(std::is_permutation(
+        enemies.begin(), enemies.end(), original.begin(), original.end()));
+}
 
-    // And the rest are far
-    for (size_t i = countNear; i < enemies.size(); ++i) {
-        float d2 = distance_sq(enemies[i].position, player);
-        EXPECT_GT(d2, 36.0f);
-    }
+TEST(PartitionNearEnemiesTest, HandlesEmptyAllFarAndAllNearGroups) {
+    std::vector<Enemy> enemies;
+    EXPECT_EQ(partition_near_enemies(enemies, {0, 0}, 1), 0u);
+    EXPECT_TRUE(enemies.empty());
+
+    enemies = {{1, {2, 0}}, {2, {3, 0}}};
+    EXPECT_EQ(partition_near_enemies(enemies, {0, 0}, 1), 0u);
+    EXPECT_EQ(partition_near_enemies(enemies, {0, 0}, 3), 2u);
+    EXPECT_EQ(enemies.size(), 2u);
 }
 
 int main(int argc, char** argv) {

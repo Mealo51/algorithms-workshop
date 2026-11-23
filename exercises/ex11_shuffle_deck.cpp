@@ -1,50 +1,74 @@
-#include <gtest/gtest.h>
-#include <vector>
-#include <random>
-#include <algorithm>
+// Challenge 11: Shuffle a deck at the start of a match
+//
+// The match owns its random engine so it can use a fixed seed for replay
+// and tests. Use that engine to shuffle this deck in place. Preserve every
+// card, including repeats. An unchanged order is a possible shuffle result.
 
-// Challenge 11: shuffle_deck
-//		https://compiler-explorer.com/z/oqcW7aEdT
-// Compiler Explorer normally recompiles automatically as you edit.
-// If you turn that off or it gets stuck, press CTRL+K to build and run manually.
-// Use the Output panel to see compiler messages and your program’s output.
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <random>
+#include <utility>
+#include <vector>
+
 enum class Card {
-    A,
-    B,
-    C,
-    D
+    Move,
+    Guard,
+    Draw,
+    Swap
 };
 
-void shuffle_deck(std::vector<Card>& deck) {
-    // TODO: refactor this to use std::shuffle
-    std::random_device rd;
-    std::mt19937 rng{rd()};
-
-    for (size_t i = deck.size(); i > 1; --i) {
-        std::uniform_int_distribution<size_t> dist(0, i - 1);
-        size_t j = dist(rng);
-        std::swap(deck[i - 1], deck[j]);
+// std::mt19937 is the random engine supplied by the caller.
+// https://en.cppreference.com/cpp/numeric/random/mersenne_twister_engine
+void shuffle_deck(std::vector<Card>& deck, std::mt19937& rng) {
+    // TODO: Replace the manual shuffle with std::shuffle and pass the
+    // supplied random engine.
+    // https://en.cppreference.com/cpp/algorithm/random_shuffle
+    for (std::size_t remaining = deck.size(); remaining > 1; --remaining) {
+        // https://en.cppreference.com/cpp/numeric/random/uniform_int_distribution
+        std::uniform_int_distribution<std::size_t> pick(0, remaining - 1);
+        std::swap(deck[remaining - 1], deck[pick(rng)]);
     }
 }
 
-TEST(ShuffleDeckTest, ShuffledDeckHasSameCards) {
-    std::vector<Card> original{
-        Card::A, Card::B, Card::C, Card::D
+TEST(ShuffleDeckTest, PreservesCardCountsIncludingDuplicates) {
+    const std::vector<Card> original{
+        Card::Move, Card::Guard, Card::Move, Card::Swap, Card::Draw, Card::Guard
     };
     auto deck = original;
+    std::mt19937 rng{123};
 
-    shuffle_deck(deck);
+    shuffle_deck(deck, rng);
 
-    // Sort both and compare to ensure it is a permutation
-    auto sorter = [](Card c) { return static_cast<int>(c); };
+    // https://en.cppreference.com/cpp/algorithm/is_permutation
+    EXPECT_TRUE(std::is_permutation(
+        deck.begin(), deck.end(), original.begin(), original.end()));
+}
 
-    std::sort(original.begin(), original.end(),
-              [&](Card lhs, Card rhs){ return sorter(lhs) < sorter(rhs); });
+TEST(ShuffleDeckTest, UsesTheSuppliedEngineAndIsRepeatableWithTheSameSeed) {
+    std::vector<Card> left{Card::Move, Card::Guard, Card::Draw, Card::Swap};
+    auto right = left;
+    const std::mt19937 initial{321};
+    auto leftRng = initial;
+    auto rightRng = initial;
 
-    std::sort(deck.begin(), deck.end(),
-              [&](Card lhs, Card rhs){ return sorter(lhs) < sorter(rhs); });
+    shuffle_deck(left, leftRng);
+    shuffle_deck(right, rightRng);
 
-    EXPECT_EQ(deck, original);
+    EXPECT_EQ(left, right);
+    EXPECT_FALSE(leftRng == initial);
+}
+
+TEST(ShuffleDeckTest, EmptyAndSingleCardDecksKeepTheirContents) {
+    std::mt19937 rng{123};
+    std::vector<Card> deck;
+    shuffle_deck(deck, rng);
+    EXPECT_TRUE(deck.empty());
+
+    deck.push_back(Card::Draw);
+    shuffle_deck(deck, rng);
+    EXPECT_EQ(deck, std::vector<Card>{Card::Draw});
 }
 
 int main(int argc, char** argv) {

@@ -1,11 +1,13 @@
-#include <gtest/gtest.h>
-#include <vector>
+// Challenge 2: Count enemies with an active poison effect
+//
+// A debug HUD shows how many enemies in the supplied roster have a poison
+// effect. Count enemies with the flag set, regardless of their remaining HP.
+// The roster is small enough for the count to fit in an int.
 
-// Challenge 2: count_poisoned
-// 		https://compiler-explorer.com/z/qTWseobfM
-// Compiler Explorer normally recompiles automatically as you edit.
-// If you turn that off or it gets stuck, press CTRL+K to build and run manually.
-// Use the Output panel to see compiler messages and your program’s output.
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <vector>
 
 struct Enemy {
     int hp;
@@ -13,37 +15,32 @@ struct Enemy {
 };
 
 int count_poisoned(const std::vector<Enemy>& enemies) {
-    // TODO: refactor this to use std::count_if
+    // TODO: Use std::count_if with a lambda that checks the poison flag.
+    // https://en.cppreference.com/cpp/algorithm/count
     int result = 0;
-    for (size_t i = 0; i < enemies.size(); ++i) {
-        if (enemies[i].poisoned) {
+    for (const Enemy& enemy : enemies) {
+        if (enemy.poisoned) {
             ++result;
         }
     }
     return result;
 }
 
-TEST(CountPoisonedTest, EmptyListIsZero) {
-    std::vector<Enemy> enemies;
-    EXPECT_EQ(count_poisoned(enemies), 0);
+TEST(CountPoisonedTest, EmptyRosterAndNoPoisonGiveZero) {
+    const std::vector<Enemy> emptyRoster;
+    const std::vector<Enemy> healthyRoster{{10, false}, {20, false}};
+    EXPECT_EQ(count_poisoned(emptyRoster), 0);
+    EXPECT_EQ(count_poisoned(healthyRoster), 0);
 }
 
-TEST(CountPoisonedTest, CountsOnlyPoisoned) {
-    std::vector<Enemy> enemies{
-        {10, false},
-        {20, true},
-        {30, true},
-        {40, false}
-    };
+TEST(CountPoisonedTest, CountsTheFlagRegardlessOfHp) {
+    const std::vector<Enemy> enemies{{0, true}, {1, false}, {100, true}};
     EXPECT_EQ(count_poisoned(enemies), 2);
 }
 
-TEST(CountPoisonedTest, AllPoisoned) {
-    std::vector<Enemy> enemies{
-        {10, true},
-        {20, true}
-    };
-    EXPECT_EQ(count_poisoned(enemies), 2);
+TEST(CountPoisonedTest, CountsEveryMatch) {
+    const std::vector<Enemy> enemies{{10, true}, {20, true}, {30, true}};
+    EXPECT_EQ(count_poisoned(enemies), 3);
 }
 
 int main(int argc, char** argv) {
