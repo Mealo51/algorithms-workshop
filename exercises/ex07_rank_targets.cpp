@@ -41,14 +41,8 @@ bool ranks_before(const Enemy& left, const Enemy& right, Vec2 player) {
 void sort_by_distance_to_player(std::vector<Enemy>& enemies, Vec2 player) {
     // TODO: Replace the nested loops with std::sort. Use a lambda that
     // captures the player position and calls ranks_before.
-    // https://en.cppreference.com/cpp/algorithm/sort
-    for (std::size_t i = 0; i + 1 < enemies.size(); ++i) {
-        for (std::size_t j = 0; j + 1 < enemies.size() - i; ++j) {
-            if (ranks_before(enemies[j + 1], enemies[j], player)) {
-                std::swap(enemies[j], enemies[j + 1]);
-            }
-        }
-    }
+    // https://en.cppreference.com/cpp/algorithm/sort   
+    std::sort(enemies.begin(), enemies.end(), [player](const Enemy& e1, const Enemy& e2) {return ranks_before(e1, e2, player); });
 }
 
 std::optional<int> closest_target_id(const std::vector<Enemy>& enemies, Vec2 player) {
@@ -56,17 +50,13 @@ std::optional<int> closest_target_id(const std::vector<Enemy>& enemies, Vec2 pla
     // does it return when there are no targets?
     // https://en.cppreference.com/cpp/algorithm/min_element
     // https://en.cppreference.com/cpp/utility/optional
+
+    auto e = std::min_element(enemies.begin(), enemies.end(), [player](const Enemy& e1, const Enemy& e2) {return ranks_before(e1, e2, player); });
+    if (e != enemies.end()) return e->id;
     if (enemies.empty()) {
         return std::nullopt;
     }
-
-    auto closest = enemies.begin();
-    for (auto candidate = closest + 1; candidate != enemies.end(); ++candidate) {
-        if (ranks_before(*candidate, *closest, player)) {
-            closest = candidate;
-        }
-    }
-    return closest->id;
+    return std::nullopt;
 }
 
 TEST(SortByDistanceTest, RanksRelativeToPlayerAndBreaksTiesById) {
