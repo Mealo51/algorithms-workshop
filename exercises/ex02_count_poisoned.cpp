@@ -17,13 +17,8 @@ struct Enemy {
 int count_poisoned(const std::vector<Enemy>& enemies) {
     // TODO: Use std::count_if with a lambda that checks the poison flag.
     // https://en.cppreference.com/cpp/algorithm/count
-    int result = 0;
-    for (const Enemy& enemy : enemies) {
-        if (enemy.poisoned) {
-            ++result;
-        }
-    }
-    return result;
+    auto it = std::count_if(enemies.begin(), enemies.end(), [](const Enemy& e) {return e.poisoned; });
+    return static_cast<int>(it);
 }
 
 TEST(CountPoisonedTest, EmptyRosterAndNoPoisonGiveZero) {

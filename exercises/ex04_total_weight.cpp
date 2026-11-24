@@ -17,10 +17,7 @@ float total_weight(const std::vector<Item>& items) {
     // TODO: Use std::accumulate with a lambda that adds one Item's weight
     // to the running total. The initial value determines the accumulator type.
     // https://en.cppreference.com/cpp/algorithm/accumulate
-    float result = 0.0f;
-    for (const Item& item : items) {
-        result += item.weight;
-    }
+    auto result = std::accumulate(items.begin(), items.end(),0.f, [](const Item& item) {return item.weight; });    
     return result;
 }
 
