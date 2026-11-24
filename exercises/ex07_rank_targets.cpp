@@ -51,7 +51,7 @@ std::optional<int> closest_target_id(const std::vector<Enemy>& enemies, Vec2 pla
     // https://en.cppreference.com/cpp/algorithm/min_element
     // https://en.cppreference.com/cpp/utility/optional
 
-    auto e = std::min_element(enemies.begin(), enemies.end(), [player](const Enemy& e1, const Enemy& e2) {return ranks_before(e1, e2, player); });
+    const auto e = std::min_element(enemies.begin(), enemies.end(), [player](const Enemy& e1, const Enemy& e2) {return ranks_before(e1, e2, player); });
     if (e != enemies.end()) return e->id;
     if (enemies.empty()) {
         return std::nullopt;

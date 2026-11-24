@@ -21,18 +21,6 @@ void remove_inactive_bullets(std::vector<Bullet>& bullets, float width, float he
     // The predicate should identify the bullets to remove.
     // https://en.cppreference.com/cpp/container/vector/erase2
     std::erase_if(bullets, [width,height](Bullet& b) {return !b.alive || b.x < 0 || b.x > width || b.y < 0 || b.y > height; });
-    //for (std::size_t i = 0; i < bullets.size();) {
-    //    const Bullet& bullet = bullets[i];
-
-    //    const bool outside =
-    //        bullet.x < 0 || bullet.x > width || bullet.y < 0 || bullet.y > height;
-
-    //    if (!bullet.alive || outside) {
-    //        bullets.erase(bullets.begin() + static_cast<std::ptrdiff_t>(i));
-    //    } else {
-    //        ++i;
-    //    }
-    //}
 }
 
 TEST(RemoveInactiveBulletsTest, KeepsBoundaryBulletsInOriginalOrder) {
