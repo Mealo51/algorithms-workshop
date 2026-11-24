@@ -27,17 +27,10 @@ void collapse_contact_runs(std::vector<ContactReport>& reports) {
     if (reports.empty()) {
         return;
     }
-
-    std::size_t kept = 1;
-    for (std::size_t i = 1; i < reports.size(); ++i) {
-        const ContactReport& last = reports[kept - 1];
-        if (reports[i].projectileId != last.projectileId ||
-            reports[i].targetId != last.targetId) {
-            reports[kept] = reports[i];
-            ++kept;
-        }
-    }
-    reports.resize(kept);
+    auto it = std::unique(reports.begin(), reports.end(),
+        [](const ContactReport& report1, const ContactReport& report2) 
+        {return report1.projectileId == report2.projectileId && report1.targetId == report2.targetId; });
+    reports.erase(it,reports.end());
 }
 
 TEST(CollapseContactRunsTest, KeepsFirstReportOfEachUnsortedRun) {
